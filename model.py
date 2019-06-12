@@ -54,3 +54,42 @@ def get_alexnet(num_class):
     model.add(tf.keras.layers.Dropout(0.4))
     model.add(tf.keras.layers.Dense(num_class, activation = 'softmax'))
     return model 
+
+def get_vgg16(num_class):
+    model = tf.keras.Sequential()
+
+    model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=(3,3), activation='relu',padding='same', input_shape=(32, 32, 3), strides = (1, 1)))
+    model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='valid'))
+
+    model.add(tf.keras.layers.Conv2D(filters=128, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=128, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='valid'))
+
+    model.add(tf.keras.layers.Conv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='valid'))
+
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
+
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=512, kernel_size=(3,3), strides=(1,1), padding='same', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
+
+    model.add(tf.keras.layers.Flatten())
+
+    model.add(tf.keras.layers.Dense(25088, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.5))
+
+    model.add(tf.keras.layers.Dense(4096, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.5))
+
+    model.add(tf.keras.layers.Dense(4096, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.5))
+
+    model.add(tf.keras.layers.Dense(num_class, activation='softmax'))       
+    return model
