@@ -1,9 +1,10 @@
 import tensorflow as tf
 
 def get_linear_model(num_class):
-    model = tf.keras.Sequential()
-    model.add(tf.keras.layers.Flatten(input_shape=(32,32,3)))
-    model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
+    K = tf.keras
+    model = K.Sequential()
+    model.add(K.layers.Flatten(input_shape=(32,32,3)))
+    model.add(K.layers.Dense(num_class, activation='softmax'))
     return model
 
 def get_one_layer_nn(num_class):
@@ -33,9 +34,30 @@ def get_lenet(num_class):
     model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_alexnet(num_class):
+def get_alexnet_32(num_class):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Conv2D(filters=96, kernel_size=(5,5), activation='relu',padding='valid', input_shape=(32, 32, 3), strides = (1, 1)))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
+    model.add(tf.keras.layers.Conv2D(filters=256, kernel_size=(5,5), strides=(1,1), padding='valid', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
+    model.add(tf.keras.layers.Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid', activation = 'relu'))
+    model.add(tf.keras.layers.Conv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='valid', activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
+    model.add(tf.keras.layers.Flatten())
+    model.add(tf.keras.layers.Dense(9216, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(4096, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(4096, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(1000, activation = 'relu'))
+    model.add(tf.keras.layers.Dropout(0.4))
+    model.add(tf.keras.layers.Dense(num_class, activation = 'softmax'))
+    return model 
+def get_alexnet_224(num_class):
+    model = tf.keras.Sequential()
+    model.add(tf.keras.layers.Conv2D(filters=96, kernel_size=(5,5), activation='relu',padding='valid', input_shape=(224, 224, 3), strides = (1, 1)))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
     model.add(tf.keras.layers.Conv2D(filters=256, kernel_size=(5,5), strides=(1,1), padding='valid', activation = 'relu'))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
