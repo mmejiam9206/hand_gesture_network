@@ -1,3 +1,4 @@
+import tensorflow as tf
 
 def get_linear_model(num_class):
     model = tf.keras.Sequential()
