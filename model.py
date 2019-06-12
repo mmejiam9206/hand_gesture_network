@@ -47,4 +47,8 @@ def get_alexnet(num_class_alexnet):
     model.add(tf.keras.layers.Dropout(0.4))
     # Output Layer
     model.add(tf.keras.layers.Dense(num_class_alexnet, activation = 'softmax'))
-    return model
+    return model 
+    #fin del modelo
+
+
+    #cambio prueba
