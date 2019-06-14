@@ -147,3 +147,13 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     prepare_dataset(args.dir)
+
+def imshow_batch_of_three(batch):
+    label_batch = batch[1].numpy()
+    image_batch = batch[0].numpy()
+    fig, axarr = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
+    for i in range(3):
+        img = image_batch[i, ...]
+        axarr[i].imshow(img)
+        axarr[i].set(xlabel='label = {}'.format(label_batch[i]))
+    
