@@ -156,4 +156,17 @@ def imshow_batch_of_three(batch):
         img = image_batch[i, ...]
         axarr[i].imshow(img)
         axarr[i].set(xlabel='label = {}'.format(label_batch[i]))
-    
+
+def imshow_with_predictions(model, batch, show_label=True):
+    label_batch = batch[1].numpy()
+    image_batch = batch[0].numpy()
+    pred_batch = model.predict(image_batch)
+    fig, axarr = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
+    for i in range(3):
+        img = image_batch[i, ...]
+        axarr[i].imshow(img)
+        pred = int(np.argmax(pred_batch[i]))
+        msg = f'pred = {pred}'
+        if show_label:
+            msg += f', label = {label_batch[i]}'
+        axarr[i].set(xlabel=msg)    
