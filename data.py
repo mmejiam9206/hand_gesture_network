@@ -28,7 +28,7 @@ def prepare_dataset(data_dir):
     metadata = defaultdict(list)
     fn = lambda x: str(hash(x) % ((sys.maxsize + 1) * 2)) + '.PNG'
     for pascal in pascal_list:
-        reader = XmlReader(os.path.join(pascal_dir, pascal))
+        reader = xmlreader(os.path.join(pascal_dir, pascal))
         ann_dict = reader.load()
         for ann in ann_dict['object']:
             new_file_name = fn(ann_dict['filename'])
