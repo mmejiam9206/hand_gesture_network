@@ -4,10 +4,10 @@ import random
 import cv2
 import json 
 import pandas as pd
-#import tensorflow as tf
+import tensorflow as tf
 from pascal_voc_tools import XmlReader
 from collections import defaultdict
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 labels = {
