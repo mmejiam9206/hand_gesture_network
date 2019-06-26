@@ -1,5 +1,5 @@
 {
-    "lineal": {
+    "linear": {
         "batch_size": 10,
         "image_size": 32,
         "learning_rate": 0.004,
