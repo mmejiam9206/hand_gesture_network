@@ -1,21 +1,23 @@
 import os
 import sys
-import random
 import cv2
 import json 
+import random
+
+import numpy as np
 import pandas as pd
 import tensorflow as tf
-from pascal_voc_tools import XmlReader
-from collections import defaultdict
 import matplotlib.pyplot as plt
-import numpy as np
+
+from collections import defaultdict
+from pascal_voc_tools import XmlReader
 
 labels = {
-    "a" : "0",
-    "e" : "1",
-    "i" : "2",
-    "o" : "3",
-    "u" : "4"
+    "a" : 0,
+    "e" : 1,
+    "i" : 2,
+    "o" : 3,
+    "u" : 4
 }
 
 def prepare_dataset(data_dir):
@@ -37,13 +39,11 @@ def prepare_dataset(data_dir):
             crop_save_img(os.path.join(data_dir, ann_dict['filename']), new_file_name, ann['bndbox'])
     metadata['split'] = split_dataset(len(metadata['label']))
     pd.DataFrame(metadata).to_csv('metadata.csv', index=False)
-    #metadata = pd.DataFrame(metadata)
-    #metadata1 = []
-    #for _, value in labels.items():
-    #    metadata1.append(metadata.query("split == 'train' & label == " + str(value)).iloc[0]) 
-    #pd.DataFrame(metadata1).to_csv('metadata1.csv', index=False)
-
-
+    metadata = pd.DataFrame(metadata)
+    metadata1 = []
+    for _, value in labels.items():
+        metadata1.append(metadata.query("split == 'train' & label == " + str(value)).iloc[0]) 
+    pd.DataFrame(metadata1).to_csv('metadata1.csv', index=False)
 
 def split_dataset(ds_len):
     test =  int(ds_len * 0.2)
@@ -84,9 +84,7 @@ def preprocess_image(image, pixels):
 def make_dataset(sources, training=False, batch_size=1,
     num_epochs=1, num_parallel_calls=1, shuffle_buffer_size=None, pixels = 32):
     """
-    
     Returns an operation to iterate over the dataset specified in sources
-
     Args:
         sources (list): A list of (filepath, label_id) pairs.
         training (bool): whether to apply certain processing steps
@@ -98,7 +96,7 @@ def make_dataset(sources, training=False, batch_size=1,
             map operations.
         shuffle_buffer_size (int): Number of elements from this dataset
             from which the new dataset will sample.
-        pixels (int): tamaño de la imagen despues del resize  
+        pixels (int): Size of the image after resize 
     Returns:
         A tf.data.Dataset object. It will return a tuple images of shape
         [N, H, W, CH] and labels shape [N, 1].
@@ -132,8 +130,34 @@ def make_dataset(sources, training=False, batch_size=1,
 
     return ds
 
+def imshow_batch_of_three(batch):
+    label_batch = batch[1].numpy()
+    image_batch = batch[0].numpy()
+    fig, axarr = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
+    for i in range(3):
+        img = image_batch[i, ...]
+        axarr[i].imshow(img)
+        axarr[i].set(xlabel='label = {}'.format(label_batch[i]))
+
 def augment_image(image):
     return image
+
+def draw_result(H, N, name, val = False):
+    fig, axs = plt.subplots(2)
+    fig.suptitle('Training Loss and Accuracy on Dataset')
+    axs[0].plot(np.arange(0, N), H.history["loss"], label="train_loss")
+    if(val):
+        axs[0].plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+    axs[0].set_xlabel("Epoch #")
+    axs[0].set_ylabel("Loss")
+    axs[0].legend(loc="lower left")
+    axs[1].plot(np.arange(0, N), H.history["accuracy"], label="train_acc")
+    if(val):
+        axs[1].plot(np.arange(0, N), H.history["val_accuracy"], label="val_acc")
+    axs[1].set_xlabel("Epoch #")
+    axs[1].set_ylabel("Accuracy")
+    axs[1].legend(loc="lower left")
+    plt.savefig(name + ".png")
 
 if __name__ == '__main__':
     import argparse
@@ -147,26 +171,3 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     prepare_dataset(args.dir)
-
-def imshow_batch_of_three(batch):
-    label_batch = batch[1].numpy()
-    image_batch = batch[0].numpy()
-    fig, axarr = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
-    for i in range(3):
-        img = image_batch[i, ...]
-        axarr[i].imshow(img)
-        axarr[i].set(xlabel='label = {}'.format(label_batch[i]))
-
-def imshow_with_predictions(model, batch, show_label=True):
-    label_batch = batch[1].numpy()
-    image_batch = batch[0].numpy()
-    pred_batch = model.predict(image_batch)
-    fig, axarr = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
-    for i in range(3):
-        img = image_batch[i, ...]
-        axarr[i].imshow(img)
-        pred = int(np.argmax(pred_batch[i]))
-        msg = f'pred = {pred}'
-        if show_label:
-            msg += f', label = {label_batch[i]}'
-        axarr[i].set(xlabel=msg)    
