@@ -22,7 +22,7 @@ def get_mult_layer_nn(num_class):
     model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_lenet(num_class, input_shape):
+def get_lenet_model(num_class, input_shape):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Conv2D(filters=6, kernel_size=(5,5), activation='tanh',padding='same', input_shape=input_shape))
     model.add(tf.keras.layers.AveragePooling2D(pool_size=(2,2)))
@@ -34,7 +34,7 @@ def get_lenet(num_class, input_shape):
     model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_alexnet(num_class, input_shape, activation='relu'):
+def get_alexnet_model(num_class, input_shape, activation='relu'):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Conv2D(filters=96, kernel_size=(5,5), activation=activation,padding='valid', input_shape=input_shape, strides = (1, 1)))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=(3,3), strides=(1,1), padding='valid'))
@@ -56,7 +56,7 @@ def get_alexnet(num_class, input_shape, activation='relu'):
     model.add(tf.keras.layers.Dense(num_class, activation = 'softmax'))
     return model 
 
-def get_vgg16(num_class):
+def get_vgg16_model(num_class):
     model = tf.keras.Sequential()
 
     model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=(3,3), activation='relu',padding='same', input_shape=(32, 32, 3), strides = (1, 1)))
