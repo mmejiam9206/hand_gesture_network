@@ -30,17 +30,17 @@ def main(config, model):
     #Make dataset
     train_one_dataset = make_dataset(train_one_sources, training=True,
         batch_size=conf['num_class'], num_epochs=1,
-        num_parallel_calls=2, pixels=conf['image_size'], target=conf['target'])
+        num_parallel_calls=2, pixels=conf['image_size'])
 
     train_dataset = make_dataset(train_sources, training=True,
         batch_size=conf['batch_size'], num_epochs=conf['epochs'],
-        num_parallel_calls=2, pixels=conf['image_size'], target=conf['target'])
+        num_parallel_calls=2, pixels=conf['image_size'])
     valid_dataset = make_dataset(valid_sources, training=False,
         batch_size=conf['batch_size'], num_epochs=1,
-        num_parallel_calls=2, pixels=conf['image_size'], target=conf['target'])
+        num_parallel_calls=2, pixels=conf['image_size'])
 
     #Load model
-    model = models[model](conf['num_class'])
+    model = models[model](conf['num_class'], input_shape=(conf['image_size'], conf['image_size'], 3))
     model.compile(loss=[tf.losses.SparseCategoricalCrossentropy()]*conf['target'],
             optimizer=tf.optimizers.Adam(conf['learning_rate']),
             metrics=['accuracy'])

@@ -1,20 +1,20 @@
 import tensorflow as tf
 
-def get_linear_model(num_class):
+def get_linear_model(num_class, input_shape, activation='relu'):
     K = tf.keras
     model = K.Sequential()
     model.add(K.layers.Flatten(input_shape=(32,32,3)))
     model.add(K.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_one_layer_nn(num_class):
+def get_one_layer_nn(num_class, input_shape, activation='relu'):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(32,32,3)))
     model.add(tf.keras.layers.Dense(100, activation='relu'))
     model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_mult_layer_nn(num_class):
+def get_mult_layer_nn(num_class, input_shape, activation='relu'):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Flatten(input_shape=(32,32,3)))
     model.add(tf.keras.layers.Dense(100, activation='relu'))
@@ -22,7 +22,7 @@ def get_mult_layer_nn(num_class):
     model.add(tf.keras.layers.Dense(num_class, activation='softmax'))
     return model
 
-def get_lenet_model(num_class, input_shape):
+def get_lenet_model(num_class, input_shape, activation='relu'):
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Conv2D(filters=6, kernel_size=(5,5), activation='tanh',padding='same', input_shape=input_shape))
     model.add(tf.keras.layers.AveragePooling2D(pool_size=(2,2)))
@@ -56,7 +56,7 @@ def get_alexnet_model(num_class, input_shape, activation='relu'):
     model.add(tf.keras.layers.Dense(num_class, activation = 'softmax'))
     return model 
 
-def get_vgg16_model(num_class):
+def get_vgg16_model(num_class, input_shape, activation='relu'):
     model = tf.keras.Sequential()
 
     model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=(3,3), activation='relu',padding='same', input_shape=(32, 32, 3), strides = (1, 1)))
